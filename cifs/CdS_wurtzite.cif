@@ -1,0 +1,91 @@
+#(C) 2010 by Fachinformationszentrum Karlsruhe. All rights reserved.
+data_60629-ICSD
+_database_code_ICSD 60629
+_audit_creation_date 1986-12-03
+_audit_update_record 2003-04-01
+_chemical_name_systematic 'Cadmium sulfide'
+_chemical_formula_structural 'Cd S'
+_chemical_formula_sum 'Cd1 S1'
+_chemical_name_structure_type ZnS(2H)
+_chemical_name_mineral Greenockite
+_exptl_crystal_density_diffrn 4.82
+_cell_measurement_temperature 293.
+#Default value included by FIZ Karlsruhe
+_cell_measurement_pressure 101.325
+#Default value included by FIZ Karlsruhe
+_publ_section_title
+
+;
+Anharmonic thermal vibrations and the position parameter in Wurtzite
+structures. I. Cadmium Sulphide
+;
+loop_
+_citation_id
+_citation_journal_full
+_citation_year
+_citation_journal_volume
+_citation_page_first
+_citation_page_last
+_citation_journal_id_ASTM
+primary 'Acta Crystallographica B (39,1983-)' 1984 40 521 530 ASBSDK
+loop_
+_publ_author_name
+'Stevenson, A.W.'
+'Milanko, M.'
+'Barnea, Z.'
+_cell_length_a 4.136
+_cell_length_b 4.136
+_cell_length_c 6.713
+_cell_angle_alpha 90.
+_cell_angle_beta 90.
+_cell_angle_gamma 120.
+_cell_volume 99.45
+_cell_formula_units_Z 2
+_symmetry_space_group_name_H-M 'P 63 m c'
+_symmetry_Int_Tables_number 186
+_refine_ls_R_factor_all 0.0665
+loop_
+_symmetry_equiv_pos_site_id
+_symmetry_equiv_pos_as_xyz
+1 '-x, -x+y, z+1/2'
+2 'x-y, -y, z+1/2'
+3 'y, x, z+1/2'
+4 'x-y, x, z+1/2'
+5 'y, -x+y, z+1/2'
+6 '-x, -y, z+1/2'
+7 'x, x-y, z'
+8 '-x+y, y, z'
+9 '-y, -x, z'
+10 '-x+y, -x, z'
+11 '-y, x-y, z'
+12 'x, y, z'
+loop_
+_atom_type_symbol
+_atom_type_oxidation_number
+Cd2+ 2
+S2- -2
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_symmetry_multiplicity
+_atom_site_Wyckoff_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_B_iso_or_equiv
+_atom_site_occupancy
+_atom_site_attached_hydrogens
+Cd1 Cd2+ 2 b 0.333333 0.666667 0 . 1. 0
+S1 S2- 2 b 0.333333 0.666667 0.37715(8) . 1. 0
+loop_
+_atom_site_aniso_label
+_atom_site_aniso_type_symbol
+_atom_site_aniso_B_11
+_atom_site_aniso_B_22
+_atom_site_aniso_B_33
+_atom_site_aniso_B_12
+_atom_site_aniso_B_13
+_atom_site_aniso_B_23
+Cd1 Cd2+ 1.376(3) 1.376(3) 1.430(5) 0.688(2) 0 0
+S1 S2- 1.136(7) 1.136(7) 1.126(20) 0.568(4) 0 0
+#End of data_60629-ICSD
