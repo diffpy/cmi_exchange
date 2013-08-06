@@ -1,10 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''SrFit example for a simple linear fit to a noisy data.
 
-import numpy as np
-from matplotlib.pyplot import plot, show, clf
+This script can be run in IPython "demo" mode.  To use the demo mode,
+start IPython and execute the following commands:
 
-# Simulate linear data with some random Gaussian noise.
+In [1]: %run ex03.py demo
+In [2]: demo()
+...
+In [3]: demo()
+...
+'''
+
+# Define "demo" object and exit if run with a single argument "demo".
+import sys
+if __name__ == '__main__' and sys.argv[1:] == ['demo']:
+    from IPython.lib.demo import ClearDemo
+    demo = ClearDemo(__file__)
+    demo.seek(1)
+    print 'Created "demo" object.  Use "demo()" to run the next section.'
+    sys.exit()
+
+# <demo> silent
+# <demo> --- stop ---
+
 xobs = np.arange(-10, 10.1)
 yobs = 0.5 * xobs + 3 + 0.3 * np.random.randn(xobs.size)
 clf()
