@@ -21,53 +21,73 @@ if __name__ == '__main__' and sys.argv[1:] == ['demo']:
     print 'Created "demo" object.  Use "demo()" to run the next section.'
     sys.exit()
 
+# <demo> auto_all
 # <demo> silent
 # <demo> --- stop ---
 
+# Simulate linear data with some random Gaussian noise.
+
+import numpy as np
 xobs = np.arange(-10, 10.1)
-yobs = 0.5 * xobs + 3 + 0.3 * np.random.randn(xobs.size)
-clf()
+dyobs = 0.3 * np.ones_like(xobs)
+yobs = 0.5 * xobs + 3 + dyobs * np.random.randn(xobs.size)
+
+# Plot the generated "observed" data (xobs, yobs).
+
+from matplotlib.pyplot import *
+ion(); clf(); hold(False)
 plot(xobs, yobs, 'x')
+title('y = 0.5*x + 3 generated with a normal noise at sigma=0.3')
 show()
 
 # <demo> --- stop ---
 
-# We are going to define a line fitting regression using srfit.
-# At first we create a srfit Profile object that holds the observed data.
+# We are going to define a line fitting regression using SrFit.
+# At first we create a SrFit Profile object that holds the observed data.
 
 from diffpy.srfit.fitbase import Profile
 linedata = Profile()
-linedata.setObservedProfile(xobs, yobs)
-# <demo> --- stop ---
+linedata.setObservedProfile(xobs, yobs, dyobs)
 
-# The second step is to create FitContribution object, which associates
+# The second step is to create a FitContribution object, which associates
 # observed profile with a mathematical model for the dependent variable.
 
 from diffpy.srfit.fitbase import FitContribution
 linefit = FitContribution('linefit')
 linefit.setProfile(linedata)
 linefit.setEquation("A * x + B")
-# <demo> --- stop ---
-# <demo> auto
 
-# srfit objects can be examined by calling their show() function.
-# SrFit parses the model equation and finds two parameters A, B.
-# Their values are at this stage undefined.
+# SrFit objects can be examined by calling their show() function.  SrFit
+# parses the model equation and finds two parameters A, B at independent
+# variable x.  The values of parameters A, B are at this stage undefined.
 
 linefit.show()
+
 # <demo> --- stop ---
 
 # We can set A and B to some specific values and calculate model
 # observations.  The x and y attributes of the FitContribution are
-# the observed values, which can be resampled or truncated to a shorter
+# the observed values, which may be re-sampled or truncated to a shorter
 # fitting range.
 
 linefit.A
 linefit.A = 3
 linefit.B = 5
-linefit.evaluate()
+print linefit.A, linefit.A.value
+print linefit.B, linefit.B.value
 
-# <demo> auto
+# <demo> --- stop ---
+
+# linefit.evaluate() returns the modeled values and linefit.residual
+# the difference between observed and modeled data scaled by estimated
+# standard deviations.
+
+print "linefit.evaluate() =", linefit.evaluate()
+print "linefit.residual() =", linefit.residual()
+plot(xobs, yobs, 'x', linedata.x, linefit.evaluate(), '-')
+title('Line simulated at A=3, B=5')
+
+# <demo> --- stop ---
 
 # We want to find optimum model parameters that fit the simulated curve
 # to the observations.  This is done by associating FitContribution with
@@ -76,24 +96,26 @@ linefit.evaluate()
 
 from diffpy.srfit.fitbase import FitRecipe
 rec = FitRecipe()
+# clearFitHooks suppresses printout of iteration number
+rec.clearFitHooks()
+
 rec.addContribution(linefit)
 rec.show()
+
 
 # <demo> --- stop ---
 
 # FitContributions may have many parameters.  We need to tell the recipe
-# object which of them should be tuned by the fit.
+# which of them should be tuned by the fit.
 
 rec.addVar(rec.linefit.A)
 rec.addVar(rec.linefit.B)
-rec.show()
-
-# <demo> auto
 
 # The addVar function created two attributes A, B for the rec object
 # which link ot the A and B parameters of the linefit contribution.
 
-print rec.A, rec.A.value
+print "rec.A =", rec.A
+print "rec.A.value =", rec.A.value
 
 # The names of the declared variables are stored in a rec.names
 # and the corresponding values in rec.values.
@@ -117,6 +139,18 @@ print "rec.residual([2, 4]) =", rec.residual([2, 4])
 from scipy.optimize import leastsq
 leastsq(rec.residual, rec.values)
 
+# Recipe variables and the linked line-function parameters are set to the
+# new optimized values.
+
+print rec.names, "-->", rec.values
+linefit.show()
+
+# The calculated function is available in the ycalc attribute of the profile.
+# It can be also accessed from the "linefit" contribution attribute of the
+# recipe as "rec.linefit.profile.ycalc".
+plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+title('Line fit using the leastsq least-squares optimizer')
+
 # <demo> --- stop ---
 
 # The FitRecipe.scalarResidual function returns the sum of squares and can
@@ -124,12 +158,14 @@ leastsq(rec.residual, rec.values)
 
 from scipy.optimize import fmin
 fmin(rec.scalarResidual, [1, 1])
-plot(linedata.x, linedata.ycalc)
+print rec.names, "-->", rec.values
+plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+title('Line fit using the fmin scalar optimizer')
 
 # <demo> --- stop ---
 
-# For a converged fit recipe, the details of the fit can be obtained
-# using the FitResults class.
+# For a converged fit recipe, the details of the fit can be extracted
+# with the FitResults class.
 
 from diffpy.srfit.fitbase import FitResults
 res = FitResults(rec)
@@ -137,54 +173,49 @@ print res
 
 # <demo> --- stop ---
 
-# FIXME below
-DISABLE = '''
-# FitRecipe can be use to fix 
-res=FitResults(rec)
-print res
-rec.fix(B=0)
-rec.show()
-rec.names
-rec.fixednames
-rec.fixedvalues
-from scipy.optimize import leastsq
-leastsq(rec.residual, rec.values)
-rec.values
-plot(xobs, linefit.evaluate())
+# Variables defined in the recipe can be fixed to a constant value.
 
-rec.constrain(rec.A, "2 * B")
-rec.names
-rec.fixednames
-rec.free('B')
-rec.names
-rec.values
+rec.fix(B=0)
+
+# The fixed variables can be checked using the "fixednames" and
+# "fixedvalues" attributes of a recipe.
+print "free:", rec.names, "-->", rec.names
+print "fixed:", rec.fixednames, "-->", rec.fixedvalues
+
+# The fit can be rerun with a constant variable B.
 leastsq(rec.residual, rec.values)
-plot(xobs, linefit.evaluate())
 print FitResults(rec)
-rec.show()
-get_ipython().magic(u'pinfo rec.unconstrain')
-rec.unconstrain('A')
-rec.names
-rec.values
-get_ipython().magic(u'pinfo rec.restrain')
-ares=rec.restrain('A', ub=0.4)
-ares
-ares.sig
-ares.scaled
+plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+title('Line fit for variable B fixed to B=0')
+
+# <demo> --- stop ---
+
+# Fixed variables may be released with the "free" function.
+# free("all") releases all fixed variables.
+rec.free('all')
+
+# Variables may be constrained to a result of an expression.
+rec.constrain(rec.A, "2 * B")
+
+# Perform linear fit where slope is twice the offset.
 leastsq(rec.residual, rec.values)
-ares.scaled
-ares.scaled=True
+print FitResults(rec)
+plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+title('Line fit for variable A constrained to A = 2*B')
+
+# <demo> --- stop ---
+
+# Constraint expressions can be removed by calling the unconstrain function.
+rec.unconstrain(rec.A)
+
+# Variables may be restrained to a specific range.  Here "ub" is the upper
+# boundary and "sig" acts as a standard deviation for ((x - ub)/sig)**2
+# penalty function.
+
+arst = rec.restrain(rec.A, ub=0.2, sig=0.001)
+
+# Perform fit with the line slope restrained to a maximum value of 0.2:
 leastsq(rec.residual, rec.values)
-ares.sig=0.01
-leastsq(rec.residual, rec.values)
-ares.scaled=False
-leastsq(rec.residual, rec.values)
-plot(xobs, linefit.evaluate())
-rec
-from cPickle
-from cPickle import dumps
-s=dumps(rec)
-from pickle import dumps
-s=dumps(rec)
-get_ipython().magic(u'save ex03.py 1-127')
-'''
+print FitResults(rec)
+plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+title('Line fit with A restrained to an upper bound of 0.2')
