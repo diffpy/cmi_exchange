@@ -13,12 +13,13 @@ In [3]: demo()
 '''
 
 # Define "demo" object and exit if run with a single argument "demo".
+from __future__ import print_function
 import sys
 if __name__ == '__main__' and sys.argv[1:] == ['demo']:
     from IPython.lib.demo import ClearDemo
     demo = ClearDemo(__file__)
     demo.seek(1)
-    print 'Created "demo" object.  Use "demo()" to run the next section.'
+    print('Created "demo" object.  Use "demo()" to run the next section.')
     sys.exit()
 
 # <demo> auto_all
@@ -73,8 +74,8 @@ linefit.show()
 linefit.A
 linefit.A = 3
 linefit.B = 5
-print linefit.A, linefit.A.value
-print linefit.B, linefit.B.value
+print(linefit.A, linefit.A.value)
+print(linefit.B, linefit.B.value)
 
 # <demo> --- stop ---
 
@@ -82,8 +83,8 @@ print linefit.B, linefit.B.value
 # the difference between observed and modeled data scaled by estimated
 # standard deviations.
 
-print "linefit.evaluate() =", linefit.evaluate()
-print "linefit.residual() =", linefit.residual()
+print("linefit.evaluate() =", linefit.evaluate())
+print("linefit.residual() =", linefit.residual())
 plot(xobs, yobs, 'x', linedata.x, linefit.evaluate(), '-')
 title('Line simulated at A=3, B=5')
 
@@ -114,22 +115,22 @@ rec.addVar(rec.linefit.B)
 # The addVar function created two attributes A, B for the rec object
 # which link ot the A and B parameters of the linefit contribution.
 
-print "rec.A =", rec.A
-print "rec.A.value =", rec.A.value
+print("rec.A =", rec.A)
+print("rec.A.value =", rec.A.value)
 
 # The names of the declared variables are stored in a rec.names
 # and the corresponding values in rec.values.
 
-print "rec.values =", rec.values
-print "rec.names =", rec.names
+print("rec.values =", rec.values)
+print("rec.names =", rec.names)
 
 # Finally the recipe objects provides a residual() function to calculate
 # the difference between the observed and simulated values.  The residual
 # function can accept a list of new variable values in the same order as
 # rec.names.
 
-print "rec.residual() =", rec.residual()
-print "rec.residual([2, 4]) =", rec.residual([2, 4])
+print("rec.residual() =", rec.residual())
+print("rec.residual([2, 4]) =", rec.residual([2, 4]))
 
 # <demo> --- stop ---
 
@@ -142,7 +143,7 @@ leastsq(rec.residual, rec.values)
 # Recipe variables and the linked line-function parameters are set to the
 # new optimized values.
 
-print rec.names, "-->", rec.values
+print(rec.names, "-->", rec.values)
 linefit.show()
 
 # The calculated function is available in the ycalc attribute of the profile.
@@ -158,7 +159,7 @@ title('Line fit using the leastsq least-squares optimizer')
 
 from scipy.optimize import fmin
 fmin(rec.scalarResidual, [1, 1])
-print rec.names, "-->", rec.values
+print(rec.names, "-->", rec.values)
 plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
 title('Line fit using the fmin scalar optimizer')
 
@@ -169,7 +170,7 @@ title('Line fit using the fmin scalar optimizer')
 
 from diffpy.srfit.fitbase import FitResults
 res = FitResults(rec)
-print res
+print(res)
 
 # <demo> --- stop ---
 
@@ -179,12 +180,12 @@ rec.fix(B=0)
 
 # The fixed variables can be checked using the "fixednames" and
 # "fixedvalues" attributes of a recipe.
-print "free:", rec.names, "-->", rec.names
-print "fixed:", rec.fixednames, "-->", rec.fixedvalues
+print("free:", rec.names, "-->", rec.names)
+print("fixed:", rec.fixednames, "-->", rec.fixedvalues)
 
 # The fit can be rerun with a constant variable B.
 leastsq(rec.residual, rec.values)
-print FitResults(rec)
+print(FitResults(rec))
 plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
 title('Line fit for variable B fixed to B=0')
 
@@ -199,7 +200,7 @@ rec.constrain(rec.A, "2 * B")
 
 # Perform linear fit where slope is twice the offset.
 leastsq(rec.residual, rec.values)
-print FitResults(rec)
+print(FitResults(rec))
 plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
 title('Line fit for variable A constrained to A = 2*B')
 
@@ -216,6 +217,6 @@ arst = rec.restrain(rec.A, ub=0.2, sig=0.001)
 
 # Perform fit with the line slope restrained to a maximum value of 0.2:
 leastsq(rec.residual, rec.values)
-print FitResults(rec)
+print(FitResults(rec))
 plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
 title('Line fit with A restrained to an upper bound of 0.2')
