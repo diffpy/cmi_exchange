@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 ########################################################################
 #
-# diffpy.srfit      by DANSE Diffraction group
-#                   Simon J. L. Billinge
-#                   (c) 2009 Trustees of the Columbia University
-#                   in the City of New York.  All rights reserved.
-#
-# File coded by:    Chris Farrow
+# diffpy.srreal     Complex Modeling Initiative
+#                   Pavol Juhas
+#                   (c) 2013 Brookhaven National Laboratory,
+#                   Upton, New York.  All rights reserved.
+
+# File coded by:    Xiahao Yang
 #
 # See AUTHORS.txt for a list of people who contributed.
 # See LICENSE.txt for license information.
@@ -22,10 +22,17 @@ Use:
 Once to install, and then
     %load_ext gaussianfit
     
-To fit the data, run
-    gaussianfit(x, y, dy, A, sig, x0)
+To try out the class execute the following commands:
+    x = linspace(-10,10,100)
+    A, x0, sig = 5, -2.5, 1.2
+    y = A * np.exp(-0.5*(x-x0)**2/sig**2) + np.random.normal(0,0.2,100)
+    newFit = GaussianFit(x, y)
+    newFit.refine()
+    newFit.plot()
     
-    x, y, dy are gaussian date to be fitted, A, sig, x0 are initial value,
+    x, y, dy are gaussian date to be fitted (dy may be omitted)
+    A, sig, and x0 are initial values. If they are omitted the program
+    will estimate starting values.
     
 This extension is based on srfit example gaussianrecipe.py 
 """
@@ -33,73 +40,153 @@ This extension is based on srfit example gaussianrecipe.py
 from diffpy.srfit.fitbase import FitContribution, FitRecipe, Profile, FitResults
 import numpy as np
 
-####### Example Code
+class GaussianFit(object):
+    '''Data attributes:
+  
+    Input data:
+ 
+    x    --  input x values (read only)
+    y    --  input y values (read only)
+    dy   --  input dy values (read only)
 
-def makeRecipe(x, y, dy, A, sig, x0):
-    """Make a FitRecipe for fitting a Gaussian curve to data.    
-    """
-    profile = Profile()
-    profile.setObservedProfile(x, y, dy)
+    Calculated parameters:
 
-    contribution = FitContribution("g1")
-    contribution.setProfile(profile, xname="x")
-    contribution.setEquation("A * exp(-0.5*(x-x0)**2/sigma**2)")
+    A    --  area under curve
+    sig  --  width of curve
+    x0   --  x-position of center of curve
+    yg   --  gaussian function calculated for the current A, sig, x0
 
-    recipe = FitRecipe()
-    recipe.addContribution(contribution)
-    recipe.addVar(contribution.A, A)
-    recipe.addVar(contribution.x0, x0)
-    recipe.addVar(contribution.sigma, sig)
-    return recipe
 
-def scipyOptimize(recipe):
-    """Optimize the recipe created above using scipy.
-    """
-    from scipy.optimize.minpack import leastsq
-    print "Fit using scipy's LM optimizer"
-    leastsq(recipe.residual, recipe.getValues())
-    
-    return
-
-def plotResults(recipe):
-    """Plot the results contained within a refined FitRecipe."""
-    x = recipe.g1.profile.x
-    y = recipe.g1.profile.y
-    ycalc = recipe.g1.profile.ycalc
-
-    # This stuff is specific to pylab from the matplotlib distribution.
-    import pylab
-    pylab.plot(x, y, 'b.', label = "observed Gaussian")
-    pylab.plot(x, ycalc, 'g-', label = "calculated Gaussian")
-    pylab.legend(loc = (0.0,0.8))
-    pylab.xlabel("x")
-    pylab.ylabel("y")
-
-    pylab.show()
-    return
-
-def gaussianfit(x, y, dy=None, A=1.0, sig=1.0, x0=0.0):
-#def gaussianfit(arg):
-    '''main function to fit and plot gaussian curve
-        x, y, dy:   gaussian date to be fitted 
-        A, sig, x0: initial value
+    To try out the class execute the following commands:
+    x = linspace(-10,10,100)
+    A, x0, sig = 5, -2.5, 1.2
+    y = A * np.exp(-0.5*(x-x0)**2/sig**2) + np.random.normal(0,0.2,100)
+    newFit = GaussianFit(x, y)
+    newFit.refine()
+    newFit.plot()
     '''
-    #print type(arg)
-    dy = np.ones_like(x) if dy==None else dy
-    
-    recipe = makeRecipe(x, y, dy, A, sig, x0)
-    scipyOptimize(recipe)
-    res = FitResults(recipe)
-    res.printResults()
-    plotResults(recipe)
-    return 
+
+    def __init__(self, x, y, dy = None, A = None, sig = None, x0 = None):
+        '''Create new GaussianFit object
+        ''' 
+        self._x = x
+        self._y = y
+        self._dy = np.ones_like(x) if dy is None else dy
+        
+        if (A is None) or (sig is None) or (x0 is None):
+            self._getStartingValues()
+        else:
+            self._A = A
+            self._sig = sig
+            self._x0 = x0
+
+        self._makeRecipe()
+        self._yg = None
+        print 'Starting values for parameters:'
+        self.printValues()
+
+        return
+
+    @property
+    def x(self):
+        return self._x
+
+    @property
+    def y(self):
+        return self._y
+
+    @property
+    def dy(self):
+        return self._dy
+
+    @property
+    def A(self):
+        return self._A
+
+    @A.setter
+    def A(self, value):
+        self._A = value
+
+    @property
+    def sig(self):
+        return self._sig
+
+    @sig.setter
+    def sig(self, value):
+        self._sig = value
+
+    @property
+    def x0(self):
+        return self._x0
+
+    @x0.setter
+    def x0(self, value):
+        self._x0 = value
+
+    @property
+    def yg(self):
+        return self._yg
+
+    def _getStartingValues(self):
+        '''Estimate starting values for A, sig, and x0
+        '''
+        peakValue = np.max(self._y)
+        peakIndex = np.argmax(self._y)
+        self._x0 = self._x[peakIndex]
+        self._sig = (self._y > peakValue/2).sum() * np.abs((self._x[1]-self._x[0])) / 2.5
+        self._A = peakValue * self._sig
+
+    def _makeRecipe(self):
+        '''Make a FitRecipe for fitting a Gaussian curve to data.    
+        ''' 
+        profile = Profile()
+        profile.setObservedProfile(self._x, self._y, self._dy)
+
+        contribution = FitContribution("g1")
+        contribution.setProfile(profile, xname="x")
+        contribution.setEquation("A * exp(-0.5*(x-x0)**2/sigma**2)")
+
+        recipe = FitRecipe()
+        recipe.addContribution(contribution)
+        recipe.addVar(contribution.A, self._A)
+        recipe.addVar(contribution.x0, self._x0)
+        recipe.addVar(contribution.sigma, self._sig)
+        
+        self._recipe = recipe
+        return
+
+    def printValues(self):
+        '''Print out values of Gaussian parameters
+        '''
+        print 'A = ', self._A
+        print 'sig = ', self._sig
+        print 'x0 = ', self._x0
+
+    def plot(self):
+        '''Plot the input data and the best fit.
+        '''
+        import pylab
+        pylab.figure()
+        pylab.plot(self._x, self._y, 'b.', label = "observed Gaussian")
+        if self._yg is not None: pylab.plot(self._x, self._yg, 'g-', label = "calculated Gaussian")
+        pylab.legend(loc = (0.0,0.8))
+        pylab.xlabel("x")
+        pylab.ylabel("y")
+        pylab.show()
+        return
+
+    def refine(self):
+        '''Optimize the recipe created above using scipy.
+        ''' 
+        from scipy.optimize.minpack import leastsq
+        print "Fit using scipy's LM optimizer"
+        leastsq(self._recipe.residual, self._recipe.getValues())
+        self._A, self._x0, self._sig = self._recipe.getValues()
+        self._yg = self._recipe.g1.profile.ycalc
+        print 'Refined parameter values:'
+        self.printValues()
+        return
 
 def load_ipython_extension(ip):
     ip.user_ns['gaussianfit']=gaussianfit
     return
-
-if __name__ == "__main__":
-    x,y,dy = np.loadtxt("gau.dat").T
-    gaussianfit(x,y)
-
-# End of file
