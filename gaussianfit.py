@@ -43,7 +43,7 @@ To try out the class execute the following commands:
     gfit.plot()
 
     x, y, dy are the data to be fitted with Gaussian peak (dy may be omitted)
-    A, sigma, and x0 are initial values.  If omitted the program will estimate
+    A, sig, and x0 are initial values.  If omitted the program will estimate
     their starting values.
 
 This extension is based on the SrFit example gaussianrecipe.py
@@ -68,15 +68,18 @@ class GaussianFit(object):
     x0   --  x-position of center of curve
     yg   --  gaussian function calculated for the current A, sig, x0
 
-
-    To try out the class execute the following commands:
+    import numpy as np
     x = linspace(-10, 10, 100)
     A, x0, sig = 5, -2.5, 1.2
     y = A * np.exp(-0.5*(x-x0)**2/sig**2) + np.random.normal(0, 0.2, 100)
-    newFit = GaussianFit(x, y)
-    newFit.refine()
-    newFit.plot()
-    '''
+    gfit = GaussianFit(x, y)
+    gfit.refine()
+    gfit.plot()
+
+    x, y, dy are the data to be fitted with Gaussian peak (dy may be omitted)
+    A, sig, and x0 are initial values.  If omitted the program will estimate
+    their starting values.
+   '''
 
     def __init__(self, x, y, dy=None, A=None, sig=None, x0=None):
         '''Create new GaussianFit object
@@ -118,6 +121,7 @@ class GaussianFit(object):
     @A.setter
     def A(self, value):
         self._A = value
+        self._recipe.A.value = value
 
     @property
     def sig(self):
@@ -126,6 +130,7 @@ class GaussianFit(object):
     @sig.setter
     def sig(self, value):
         self._sig = value
+        self._recipe.sig.value = value
 
     @property
     def x0(self):
@@ -134,6 +139,7 @@ class GaussianFit(object):
     @x0.setter
     def x0(self, value):
         self._x0 = value
+        self._recipe.x0.value = value
 
     @property
     def yg(self):
@@ -156,13 +162,13 @@ class GaussianFit(object):
 
         contribution = FitContribution("g1")
         contribution.setProfile(profile, xname="x")
-        contribution.setEquation("A * exp(-0.5*(x-x0)**2/sigma**2)")
+        contribution.setEquation("A * exp(-0.5*(x-x0)**2/sig**2)")
 
         recipe = FitRecipe()
         recipe.addContribution(contribution)
         recipe.addVar(contribution.A, self._A)
         recipe.addVar(contribution.x0, self._x0)
-        recipe.addVar(contribution.sigma, self._sig)
+        recipe.addVar(contribution.sig, self._sig)
 
         self._recipe = recipe
         return
