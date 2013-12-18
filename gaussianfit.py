@@ -213,6 +213,27 @@ class GaussianFit(object):
 
 # end of class GaussianFit
 
+
+def fitGaussian(x, y, dy=None, A=None, sig=None, x0=None):
+    '''Fit Gaussian curve to the data and return calculated profile.
+
+    x    -- input x values
+    y    -- input y values
+    dy   -- estimated standard deviations for the y-values (optional)
+    A, sig, x0 -- optional initial parameters for the area, width and
+            center of the Gauss function.  Omitted parameters will be
+            estimated from the input data.
+
+    Return a tuple of (yg, fit), where yg is the calculated Gaussian
+    and fit and instance of the GaussianFit class with any details
+    of the fit one could possible desire.
+    '''
+    fit = GaussianFit(x, y, dy=dy, A=A, sig=sig, x0=x0)
+    fit.refine()
+    return (fit.yg.copy(), fit)
+
+
 def load_ipython_extension(ip):
     ip.user_ns['GaussianFit'] = GaussianFit
+    ip.user_ns['fitGaussian'] = fitGaussian
     return
