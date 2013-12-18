@@ -34,17 +34,18 @@ to load it at startup every time.
 
 To try out the class execute the following commands:
 
-    import numpy as np
-    x = linspace(-10, 10, 100)
-    A, x0, sig = 5, -2.5, 1.2
-    y = A * np.exp(-0.5*(x-x0)**2/sig**2) + np.random.normal(0, 0.2, 100)
-    gfit = GaussianFit(x, y)
-    gfit.refine()
-    gfit.plot()
+import numpy as np
+x = np.arange(-10, 10, 0.1)
+x0, sig = -2, 1.5
+noise = 0.2 * np.ones_like(x)
+y = np.exp(-0.5*(x-x0)**2/sig**2) + noise * np.random.randn(*x.shape)
+gfit = GaussianFit(x, y, noise)
+gfit.refine()
+gfit.plot()
 
-    x, y, dy are the data to be fitted with Gaussian peak (dy may be omitted)
-    A, sig, and x0 are initial values.  If omitted the program will estimate
-    their starting values.
+x, y, dy are the data to be fitted with Gaussian peak (dy may be omitted)
+A, sig, and x0 are initial values.  If omitted the program will estimate
+their starting values.
 
 This extension is based on the SrFit example gaussianrecipe.py
 """
@@ -53,156 +54,161 @@ from diffpy.srfit.fitbase import FitContribution, FitRecipe, Profile, FitResults
 import numpy as np
 
 class GaussianFit(object):
-    '''Data attributes:
+    '''Least-squares fit of Gauss function to the specified data.
 
-    Input data:
+    Input and simulated data (read-only):
 
-    x    --  input x values (read only)
-    y    --  input y values (read only)
-    dy   --  input dy values (read only)
+    x    --  input x values
+    y    --  input y values
+    dy   --  estimated standard deviations for the y-values
+    yg   --  Gauss function calculated for the current A, sig, x0
 
-    Calculated parameters:
+    Parameters of the Gauss function:
 
-    A    --  area under curve
-    sig  --  width of curve
-    x0   --  x-position of center of curve
-    yg   --  gaussian function calculated for the current A, sig, x0
+    A    --  integrated area of the fitted peak
+    sig  --  width of curve (parameter sigma in the Gauss distribution
+             function)
+    x0   --  x-position of the peak center
 
-    import numpy as np
-    x = linspace(-10, 10, 100)
-    A, x0, sig = 5, -2.5, 1.2
-    y = A * np.exp(-0.5*(x-x0)**2/sig**2) + np.random.normal(0, 0.2, 100)
-    gfit = GaussianFit(x, y)
-    gfit.refine()
-    gfit.plot()
+    Fit-related objects:
 
-    x, y, dy are the data to be fitted with Gaussian peak (dy may be omitted)
-    A, sig, and x0 are initial values.  If omitted the program will estimate
-    their starting values.
-   '''
+    results -- result report from the last refinement, refined values,
+             and their estimated errors, parameter correlations, etc.
+    recipe -- FitRecipe from SrFit that manages this refinement
+    '''
 
     def __init__(self, x, y, dy=None, A=None, sig=None, x0=None):
         '''Create new GaussianFit object
+
+        x, y -- curve to be fitted with Gaussian peak.
+        dy   -- estimated standard deviations for the y-values
+                (may be omitted).
+        A, sig, x0   -- optional initial parameters for the Gauss function.
+                Omitted parameters will be estimated from the input data.
         '''
-        self._x = x
-        self._y = y
-        self._dy = np.ones_like(x) if dy is None else dy
-
-        if (A is None) or (sig is None) or (x0 is None):
+        self.results = None
+        self._makeRecipe(x, y, dy)
+        if None in (A, sig, x0):
             self._getStartingValues()
-        else:
-            self._A = A
-            self._sig = sig
-            self._x0 = x0
-
-        self._makeRecipe()
-        self._yg = None
-        print 'Starting values for parameters:'
+        if A is not None:  self.A = A
+        if sig is not None:  self.sig = sig
+        if x0 is not None:  self.x0 = x0
+        print 'Initial parameter values:'
         self.printValues()
-
         return
 
     @property
     def x(self):
-        return self._x
+        return self.recipe.g1.profile.x
 
     @property
     def y(self):
-        return self._y
+        return self.recipe.g1.profile.y
 
     @property
     def dy(self):
-        return self._dy
+        return self.recipe.g1.profile.dy
 
     @property
     def A(self):
-        return self._A
+        return self.recipe.A.value
 
     @A.setter
     def A(self, value):
-        self._A = value
-        self._recipe.A.value = value
+        self.recipe.A = value
+        return
 
     @property
     def sig(self):
-        return self._sig
+        return self.recipe.sig.value
 
     @sig.setter
     def sig(self, value):
-        self._sig = value
-        self._recipe.sig.value = value
+        self.recipe.sig = value
+        return
 
     @property
     def x0(self):
-        return self._x0
+        return self.recipe.x0.value
 
     @x0.setter
     def x0(self, value):
-        self._x0 = value
-        self._recipe.x0.value = value
+        self.recipe.x0 = value
+        return
 
     @property
     def yg(self):
-        return self._yg
+        return self.recipe.g1.evaluate()
 
     def _getStartingValues(self):
         '''Estimate starting values for A, sig, and x0
         '''
-        peakValue = np.max(self._y)
-        peakIndex = np.argmax(self._y)
-        self._x0 = self._x[peakIndex]
-        self._sig = (self._y > peakValue/2).sum() * np.abs((self._x[1]-self._x[0])) / 2.5
-        self._A = peakValue * self._sig
+        from numpy import sqrt, log, pi
+        x, y = self.x, self.y
+        peakIndex = y.argmax()
+        peakValue = y[peakIndex]
+        self.x0 = x[peakIndex]
+        halfmaxlo = (y < peakValue/2) & (x < self.x0)
+        xhalflo = x[halfmaxlo][-1] if halfmaxlo.any() else x.min()
+        halfmaxhi = (y < peakValue/2) & (x > self.x0)
+        xhalfhi = x[halfmaxhi][0] if halfmaxhi.any() else x.max()
+        fwhm = xhalfhi - xhalflo
+        self.sig = fwhm / (2 * sqrt(2 * log(2)))
+        self.A = peakValue * sqrt(2 * pi) * self.sig
+        return
 
-    def _makeRecipe(self):
+
+    def _makeRecipe(self, x, y, dy):
         '''Make a FitRecipe for fitting a Gaussian curve to data.
         '''
         profile = Profile()
-        profile.setObservedProfile(self._x, self._y, self._dy)
-
+        profile.setObservedProfile(x, y, dy)
         contribution = FitContribution("g1")
         contribution.setProfile(profile, xname="x")
-        contribution.setEquation("A * exp(-0.5*(x-x0)**2/sig**2)")
-
+        contribution.registerStringFunction(
+                '1/sqrt(2 * pi * sig**2)', name='gaussnorm')
+        contribution.setEquation(
+                "A * gaussnorm * exp(-0.5 * (x - x0)**2/sig**2)")
         recipe = FitRecipe()
         recipe.addContribution(contribution)
-        recipe.addVar(contribution.A, self._A)
-        recipe.addVar(contribution.x0, self._x0)
-        recipe.addVar(contribution.sig, self._sig)
-
-        self._recipe = recipe
+        recipe.addVar(contribution.A)
+        recipe.addVar(contribution.x0)
+        recipe.addVar(contribution.sig)
+        recipe.clearFitHooks()
+        self.recipe = recipe
         return
+
 
     def printValues(self):
         '''Print out values of Gaussian parameters
         '''
-        print 'A = ', self._A
-        print 'sig = ', self._sig
-        print 'x0 = ', self._x0
+        print 'A =', self.A
+        print 'sig =', self.sig
+        print 'x0 =', self.x0
+        return
+
 
     def plot(self):
         '''Plot the input data and the best fit.
         '''
         import pylab
-        pylab.figure()
-        pylab.plot(self._x, self._y, 'b.', label="observed Gaussian")
-        if self._yg is not None: pylab.plot(self._x, self._yg, 'g-', label="calculated Gaussian")
-        pylab.legend(loc=(0.0, 0.8))
+        pylab.plot(self.x, self.y, 'b.', label="observed Gaussian")
+        pylab.plot(self.x, self.yg, 'g-', label="calculated Gaussian")
+        pylab.legend()
         pylab.xlabel("x")
         pylab.ylabel("y")
         pylab.show()
         return
 
+
     def refine(self):
         '''Optimize the recipe created above using scipy.
         '''
         from scipy.optimize.minpack import leastsq
-        print "Fit using scipy's LM optimizer"
-        leastsq(self._recipe.residual, self._recipe.getValues())
-        self._A, self._x0, self._sig = self._recipe.getValues()
-        self._yg = self._recipe.g1.profile.ycalc
-        print 'Refined parameter values:'
-        self.printValues()
+        leastsq(self.recipe.residual, self.recipe.values)
+        self.results = FitResults(self.recipe)
+        print "Fit results:\n"
+        print self.results
         return
 
 # end of class GaussianFit
