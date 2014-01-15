@@ -22,7 +22,7 @@ Usage in IPython shell:
 
 Install this extension with
 
-    %install_ext https://raw.github.com/diffpy/srfit-demos/master/gaussianfit.py
+    %install_ext https://raw.github.com/diffpy/srfit-demos/master/ipyplugin/gaussianfit.py
 
 Activate this extension using
 
