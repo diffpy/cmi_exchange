@@ -33,11 +33,17 @@ Here are examples for calculating the pair distribution function of C60 (discret
 IPython notebook
 ----------------
 
-Part of examples come along with the IPython notebook version. To start the IPython notebook mode, run the command
+Part of examples have IPython notebook version. To start the IPython notebook mode, run the command
 
     ipython notebook
     
-Then user can load the .ipynb file into the workspace and run the scirpt step by step interactivly. In notebook, user can change the value in scripts and run the block of scripts by "Ctrl-Enter" and see the results in time. For more details of IPython notebook, please refer http://ipython.org/ipython-doc/stable/interactive/notebook.html. 
+Then you can load the .ipynb file into the workspace or alternatively run 
+
+    ipython notebook name_of_notebook.ipynb
+
+to load the notebook file directly. Then you can interactivly run the scirpt step by step. In each cell of codes, you can try to change the scripts and see the results by running the code cell using "Ctrl+Enter".
+
+For more details of the usage of IPython notebook, please refer to http://ipython.org/ipython-doc/stable/interactive/notebook.html. 
 
 
 IPython extension
