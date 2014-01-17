@@ -15,7 +15,7 @@ diffpy.srfit is a data optimization framework designed for fitting crystal struc
 
 Here is an example for a simple linear fit to a noisy data. This script can be run in IPython "demo" mode.  To use the demo mode, start IPython and execute the following commands:
 
-    In [1]: %run ex03.py demo
+    In [1]: %run LinerFit.py demo
     In [2]: demo()
     ...
     In [3]: demo()
