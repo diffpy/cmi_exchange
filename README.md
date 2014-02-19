@@ -1,9 +1,24 @@
-# cmi_exchange
+# CMI Exchange
 
 This project is a community developed collection of sample scripts, functions
-and IPython plugins related to the DiffPy-CMI complex modeling framework.
+and IPython plugins related to the DiffPy-CMI complex modeling framework. 
+To get started, clone this project to your local machine and try running some scripts!
 
-cmi_plugins is for IPython plugins ... FIXME
+Contents
+--------
+
+* [CMI Plugins](./cmi_plugins/) contains IPython plugins and functions. 
+* [CMI Scripts](./cmi_scripts/) contains complete python scripts that make use of the DiffPy-CMI packages.
+
+
+If you are new to DiffPy-CMI, browse through the available files to get a feel for
+what DiffPy-CMI can do.  If you've written a useful or instructive piece of code using any
+part of the DiffPy-CMI framework, feel free to share your work with the community. 
+If you are new to git and would like to learn how to contribute 
+[start here](https://help.github.com/articles/fork-a-repo).
+
+
+FIXME: move the contents below to the appropriate README files for the individual projects
 
 collection of examples for learning the diffpy.srfit data fitting framework. Currently it includes examples of:
 
