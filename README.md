@@ -1,7 +1,11 @@
-srfit-demos
-===========
+# cmi_exchange
 
-This project is a collection of examples for learning the diffpy.srfit data fitting framework. Currently it includes examples of:
+This project is a community developed collection of sample scripts, functions
+and IPython plugins related to the DiffPy-CMI complex modeling framework.
+
+cmi_plugins is for IPython plugins ... FIXME
+
+collection of examples for learning the diffpy.srfit data fitting framework. Currently it includes examples of:
 
 * diffpy.srfit
 * diffpy.srreal
