@@ -2,7 +2,6 @@
 
 This project is a community developed collection of sample scripts, functions
 and IPython plugins related to the DiffPy-CMI complex modeling framework. 
-To get started, clone this project to your local machine or download the zip file.
 If you are new to DiffPy-CMI, browse through the [available files](./cmi_scripts/) to get a feel for
 what DiffPy-CMI can do.  If you've written a useful or instructive piece of code using any
 part of the DiffPy-CMI framework, feel free to share your work with the community. 
@@ -12,7 +11,8 @@ If you are new to git and would like to learn how to contribute
 New User Tips
 -------------
 
-The best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example,
+To get started, clone this project to your local machine or download the zip file. Once you have the files
+the best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example,
 to simulate the PDF of C60, navigate to the [cmi_scripts/calcpdfc60](./cmi_scripts/calcpdfc60) directory and 
 type:
 
