@@ -12,8 +12,8 @@ If you are new to git and would like to learn how to contribute
 New User Tips
 -------------
 
-The best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example
-to run the calcpdfc60 script, navigate to the cmi_scripts/calcpdfc60 directory and 
+The best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example,
+to simulate the PDF of C60, navigate to the [cmi_scripts/calcpdfc60](./cmi_scripts/calcpdfc60) directory and 
 type:
 
     $ ipython --pylab
@@ -29,7 +29,7 @@ similar to Mathematica.  To start notebook mode in IPython, run the command
 You can then load the .ipynb file directly into your workspace. 
 
 
-### recommended tutorials
+### Recommended Tutorials
 
 * [New user tutorial 1](./cmi_scripts/)
 * [Another tutorial](./cmi_scripts/)
