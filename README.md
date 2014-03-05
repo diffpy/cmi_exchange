@@ -14,7 +14,6 @@ All Examples
 ------------
 
 * [cmi_plugins](./cmi_plugins/) contains IPython plugins and functions.
- 
 * [cmi_cripts](./cmi_scripts/) contains complete python scripts that make use of the DiffPy-CMI packages.
 
 
