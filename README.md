@@ -11,7 +11,7 @@ If you are new to git and would like to learn how to contribute
 New User Tips
 -------------
 
-To get started, using the button on the right download the zip file ( or clone this project to your local machine). Once you have the files
+To get started, using the button on the right download the zip file (or clone this project to your local machine). Once you have the files
 the best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example,
 to simulate the PDF of C60, navigate to the [cmi_scripts/calcpdfc60](./cmi_scripts/calcpdfc60) directory and 
 type:
