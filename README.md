@@ -4,6 +4,9 @@ This project is a community developed collection of sample scripts, functions
 and IPython plugins related to the DiffPy-CMI complex modeling framework. 
 To get started, clone this project to your local machine and try running some scripts!
 
+* [New user tutorial](./cmi_plugins/)
+* [Additional tutorial examples](./cmi_plugins/)
+
 Contents
 --------
 
