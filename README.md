@@ -10,11 +10,11 @@ New User Tutorials
 * [New user tutorial 1](./cmi_plugins/)
 * [Another tutorial](./cmi_plugins/)
 
-All Examples
-------------
+Contents
+---------
 
 * [cmi_plugins](./cmi_plugins/) contains IPython plugins and functions.
-* [cmi_cripts](./cmi_scripts/) contains complete python scripts that make use of the DiffPy-CMI packages.
+* [cmi_scripts](./cmi_scripts/) contains complete python scripts that make use of the DiffPy-CMI packages.
 
 
 If you are new to DiffPy-CMI, browse through the available files to get a feel for
