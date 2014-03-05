@@ -33,8 +33,8 @@ You can then load the .ipynb file directly into your workspace.
 
 ### Recommended Tutorials
 
-* [New user tutorial 1](./cmi_scripts/)
-* [Another tutorial](./cmi_scripts/)
+* [Fit Ni PDF](./cmi_scripts/fitNiPDF)
+* 
 
 Contents
 ---------
