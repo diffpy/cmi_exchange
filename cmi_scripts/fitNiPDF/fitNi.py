@@ -9,10 +9,10 @@ import pylab
 # A least squares fitting algorithm from scipy
 from scipy.optimize.minpack import leastsq
 
-# DiffPy-CMI modules for building a fitting recipe 
+# DiffPy-CMI modules for building a fitting recipe
 from diffpy.Structure import loadStructure
 from diffpy.srfit.pdf import PDFContribution
-from diffpy.srfit.fitbase import FitRecipe 
+from diffpy.srfit.fitbase import FitRecipe, FitResults
 
 # Files containing our experimental data and structure file
 dataFile = "ni-q27r100-neutron.gr"
@@ -25,12 +25,12 @@ niPDF = PDFContribution("nickel")
 
 # Load the data and set the r-range over which we'll fit
 niPDF.loadData(dataFile)
-niPDF.setCalculationRange(xmin = 1, xmax = 20, dx = 0.01)
+niPDF.setCalculationRange(xmin=1, xmax=20, dx=0.01)
 
 # Add the structure from our cif file to the contribution
 niStructure = loadStructure(structureFile)
 niPDF.addStructure("nickel", niStructure)
-  
+
 # The FitRecipe does the work of calculating the PDF with the fit variable
 # that we give it.
 niFit = FitRecipe()
@@ -43,13 +43,17 @@ niFit.addContribution(niPDF)
 # parameters according to the Fm-3m space group.
 from diffpy.srfit.structure import constrainAsSpaceGroup
 spaceGroupParams = constrainAsSpaceGroup(niPDF.nickel.phase, "Fm-3m")
+print "Space group parameters are:",
+print ', '.join([p.name for p in spaceGroupParams])
+print
 
-# We can now cycle through the parameters and add them to the recipe as
+# We can now cycle through the parameters and activate them in the recipe as
 # variables
 for par in spaceGroupParams.latpars:
     niFit.addVar(par)
+# Set initial value for the ADP parameters, because CIF had no ADP data.
 for par in spaceGroupParams.adppars:
-    niFit.addVar(par, 0.005)
+    niFit.addVar(par, value=0.005)
 
 # As usual, we add variables for the overall scale of the PDF and a delta2
 # parameter for correlated motion of neighboring atoms.
@@ -57,34 +61,44 @@ niFit.addVar(niPDF.scale, 1)
 niFit.addVar(niPDF.nickel.delta2, 5)
 
 # We fix Qdamp based on prior information about our beamline.
-niFit.addVar(niPDF.qdamp, 0.03, fixed = True)
+niFit.addVar(niPDF.qdamp, 0.03, fixed=True)
+
+# Turn off printout of iteration number.
+niFit.clearFitHooks()
 
 # We can now execute the fit using scipy's least square optimizer.
-print "Fit using scipy's LM optimizer"
-leastsq(niFit.residual, niFit.getValues())
+print "Refine PDF using scipy's least-squares optimizer:"
+print "  variables:", niFit.names
+print "  initial values:", niFit.values
+leastsq(niFit.residual, niFit.values)
+print "  final values:", niFit.values
+print
 
+# Obtain and display the fit results.
+niResults = FitResults(niFit)
+print "FIT RESULTS\n"
+print niResults
 
-"""Now that the fit is done we can plot our results"""
+# Plot the observed and refined PDF.
 
 # Get the experimental data from the recipe
 r = niFit.nickel.profile.x
-g = niFit.nickel.profile.y
+gobs = niFit.nickel.profile.y
 
 # Get the calculated PDF and compute the difference between the calculated and
 # measured PDF
-gcalc = niFit.nickel.profile.ycalc
-diffzero = -0.8 * max(g) * np.ones_like(g)
-diff = g - gcalc + diffzero
+gcalc = niFit.nickel.evaluate()
+baseline = 1.1 * gobs.min()
+gdiff = gobs - gcalc
 
 # Plot!
 pylab.figure()
-pylab.plot(r,g,'bo',label="G(r) Data")
-pylab.plot(r, gcalc,'r-',label="G(r) Fit")
-pylab.plot(r,diff,'g-',label="G(r) diff")
-pylab.plot(r,diffzero,'k-')
-pylab.xlabel("$r (\AA)$")
-pylab.ylabel("$G (\AA^{-2})$")
-pylab.legend(loc=1)
+pylab.plot(r, gobs, 'bo', label="G(r) data")
+pylab.plot(r, gcalc, 'r-', label="G(r) fit")
+pylab.plot(r, gdiff + baseline, 'g-', label="G(r) diff")
+pylab.plot(r, np.zeros_like(r) + baseline, 'k:')
+pylab.xlabel(r"$r (\AA)$")
+pylab.ylabel(r"$G (\AA^{-2})$")
+pylab.legend()
 
 pylab.show()
-
