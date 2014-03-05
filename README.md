@@ -12,22 +12,22 @@ If you are new to git and would like to learn how to contribute
 New User Tips
 -------------
 
+The best way to run the examples is to use [IPython](http://ipython.org) with interactive plotting. For example
+to run the calcpdfc60 script, navigate to the cmi_scripts/calcpdfc60 directory and 
+type:
+
+    $ ipython --pylab
+    In [1]: %run c60.py
+
+
 Some of the above examples are written as IPython notebooks (extension
 .ipynb).  An IPython notebook creates an interactive computational environment
 similar to Mathematica.  To start notebook mode in IPython, run the command
 
     ipython notebook
     
-You can then load the .ipynb file directly into your workspace. Alternatively,
-you can run 
+You can then load the .ipynb file directly into your workspace. 
 
-    ipython notebook name_of_notebook.ipynb
-
-to load the notebook file directly. You can then interactivly run the script
-step by step, changing individual parts and updating the result by typing
-"Ctrl+Enter".
-
-For more information visit the [IPython notebook](http://ipython.org/notebook.html) documentation page
 
 ### recommended tutorials
 
