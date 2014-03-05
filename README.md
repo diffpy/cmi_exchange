@@ -34,7 +34,6 @@ You can then load the .ipynb file directly into your workspace.
 ### Recommended Tutorials
 
 * [Fit Ni PDF](./cmi_scripts/fitNiPDF)
-* 
 
 Contents
 ---------
