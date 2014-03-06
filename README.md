@@ -22,7 +22,7 @@ type:
     In [1]: %run c60.py
 
 
-Some of the above examples are written as IPython notebooks (extension
+Some of the examples are written as IPython notebooks (extension
 .ipynb).  An IPython notebook creates an interactive computational environment
 similar to Mathematica.  To start notebook mode in IPython, run the command
 
