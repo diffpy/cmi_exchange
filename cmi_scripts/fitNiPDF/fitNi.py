@@ -17,6 +17,7 @@ from diffpy.srfit.fitbase import FitRecipe, FitResults
 # Files containing our experimental data and structure file
 dataFile = "ni-q27r100-neutron.gr"
 structureFile = "ni.cif"
+spaceGroup = "Fm-3m"
 
 # The first thing to construct is a contribution. Since this is a simple
 # example, the contribution will simply contain our PDF data and an associated
@@ -42,7 +43,7 @@ niFit.addContribution(niPDF)
 # srfit function constrainAsSpaceGroup to constrain the lattice and ADP
 # parameters according to the Fm-3m space group.
 from diffpy.srfit.structure import constrainAsSpaceGroup
-spaceGroupParams = constrainAsSpaceGroup(niPDF.nickel.phase, "Fm-3m")
+spaceGroupParams = constrainAsSpaceGroup(niPDF.nickel.phase, spaceGroup)
 print "Space group parameters are:",
 print ', '.join([p.name for p in spaceGroupParams])
 print
