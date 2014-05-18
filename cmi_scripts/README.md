@@ -8,13 +8,16 @@ problem you are interested in.
 Contents
 --------
 
+* [calcbvsnacl](./calcbvsnacl) - Calculate bond valence sums for NaCl
+  using standard and custom valence parameters.
+
 * [calcpdfc60](./calcpdfc60) - Calculate and plot a PDF for C60 from a stru
   file. Uses the DebyePDFCalculator from DiffPy-CMI.
 
 * [calcpdfcds](./calcpdfcds) - Calculate and plot a PDF for CdS wurtzite from
   a cif file. Uses the PDFCalculator module from DiffPy-CMI.
 
-* [fitCdSeNP](./fitCdSeNP) - Fit the PDF of CdSe nanoparticles using a 
+* [fitCdSeNP](./fitCdSeNP) - Fit the PDF of CdSe nanoparticles using a
   non-periodic structure model.
 
 * [fitCdSeNP](./fitNiPDF) - Fit a Ni neutron PDF using a periodic Ni structure
@@ -33,9 +36,9 @@ Some of the above examples are written as IPython notebooks (extension
 similar to Mathematica.  To start notebook mode in IPython, run the command
 
     ipython notebook
-    
+
 You can then load the .ipynb file directly into your workspace. Alternatively,
-you can run 
+you can run
 
     ipython notebook name_of_notebook.ipynb
 
