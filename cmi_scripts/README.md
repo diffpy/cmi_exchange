@@ -14,9 +14,15 @@ Contents
 * [calcpdfcds](./calcpdfcds) - Calculate and plot a PDF for CdS wurtzite from
   a cif file. Uses the PDFCalculator module from DiffPy-CMI.
 
+* [fitCdSeNP](./fitCdSeNP) - Fit the PDF of CdSe nanoparticles using a 
+  non-periodic structure model.
+
+* [fitCdSeNP](./fitNiPDF) - Fit a Ni neutron PDF using a periodic Ni structure
+  model.
+
 * [linearfit](./linearfit) - Perform a simple linear fit to a set of noisy
   data. This script can be run in IPython "demo" mode or as an IPython
-notebook.
+  notebook.
 
 
 More information on IPython
