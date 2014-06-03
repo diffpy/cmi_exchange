@@ -94,12 +94,12 @@ gdiff = gobs - gcalc
 
 # Plot!
 pylab.figure()
-pylab.plot(r, gobs, 'bo', label="G(r) data")
+pylab.plot(r, gobs, 'bo', label="G(r) data",markerfacecolor='w',markeredgecolor='b')
 pylab.plot(r, gcalc, 'r-', label="G(r) fit")
 pylab.plot(r, gdiff + baseline, 'g-', label="G(r) diff")
 pylab.plot(r, np.zeros_like(r) + baseline, 'k:')
-pylab.xlabel(r"$r (\AA)$")
-pylab.ylabel(r"$G (\AA^{-2})$")
+pylab.xlabel(r"r ($\AA$)")
+pylab.ylabel(r"G ($\AA^{-2}$)")
 pylab.legend()
 
 pylab.show()
