@@ -94,7 +94,8 @@ gdiff = gobs - gcalc
 
 # Plot!
 pylab.figure()
-pylab.plot(r, gobs, 'bo', label="G(r) data",markerfacecolor='w',markeredgecolor='b')
+pylab.plot(r, gobs, 'bo', label="G(r) data",
+        markerfacecolor='none', markeredgecolor='b')
 pylab.plot(r, gcalc, 'r-', label="G(r) fit")
 pylab.plot(r, gdiff + baseline, 'g-', label="G(r) diff")
 pylab.plot(r, np.zeros_like(r) + baseline, 'k:')
