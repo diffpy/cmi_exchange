@@ -20,13 +20,9 @@ its sharing as IPython extension.
 
 Usage in IPython shell:
 
-Install this extension with
-
-    %install_ext https://raw.github.com/diffpy/srfit-demos/master/ipyplugin/gaussianfit.py
-
 Activate this extension using
 
-    %load_ext gaussianfit
+    %load_ext cmi_plugins.ipy_gaussianfit
 
 or adjust the c.InteractiveShellApp.extensions variable in ipython_config.py
 to load it at startup every time.
