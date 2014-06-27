@@ -2,13 +2,12 @@
 
 Here you will find community developed functions and IPython plugins related to the DiffPy-CMI
 complex modeling framework.
-
 CMI Plugins require that the parent cmi_exchange directory is in
 the Python module path, so that any given plugin can be imported
 in Python using
 
 ```python
-import cmi_plugins.SomeName`
+import cmi_plugins.SomeName
 ```
 
 See the [Python Path Instructions](./PYPATH.md) for details on
@@ -51,7 +50,7 @@ their starting values.
 are importable IPython modules that can modify the behavior of the shell to
 add functionality.  They are activated from the IPython command line by running
 
-    %load_ext name_of_extenstion
+    %load_ext python_name_of_extenstion
 
 To have certain extensions available at startup first make sure that
 the IPython user profile exists and determine its location by running
@@ -66,4 +65,4 @@ Edit the `ipython_config.py` file in the profile directory
 and modify the `c.InteractiveShellApp.extensions` variable
 as necessary.  See
 [IPython documentation](http://ipython.org/ipython-doc/stable/config/)
-for complete details.
+for an exhaustive details.
