@@ -41,7 +41,7 @@ mkdir -p /wherever/is/user/site
 ```
 
 Finally, once the site directory is determined and known to exist,
-navigate to the [cmi_exchange](../) directory in the terminal and run the
+navigate to the root *cmi_exchange* directory in the terminal and run the
 following command:
 
 ```sh
@@ -62,17 +62,17 @@ which should display a brief description for the content of cmi_plugins.
 ## Use symbolic link
 
 
-Another option is to create a symbolic link to [cmi_plugins](./) in one
-of the directories that is already in Python path.  To Python this will
-appear to as if cmi_plugins were a subdirectory in one of its paths.
-To print out the list of the active Python paths, use
+Another option is to create a symbolic link to the *cmi_plugins* directory
+in one of the directories that is already in Python path.  To Python this will
+appear to as if cmi_plugins were a subdirectory in one of its paths.  To print
+out the list of the active Python paths, use
 
 ```sh
 python -c "import sys; print '\n'.join(sys.path)"
 ```
 
 Select one of those directories and then navigate to the root
-[cmi_exchange](../) directory and run the following command
+*cmi_exchange* directory and run the following command
 
 ```sh
 ln -si $PWD/cmi_plugins /the/selected/directory/
@@ -89,7 +89,7 @@ python -m pydoc cmi_plugins
 
 Python module path can be also extended by setting the *PYTHONPATH*
 environment variable so that it contains a full path to the root
-[cmi_exchange](../) directory.  Determine your shell startup file (usually
+*cmi_exchange* directory.  Determine your shell startup file (usually
 one of `.profile`, `.bash_profile`, `.zshenv`) and add there the
 following line:
 
