@@ -20,7 +20,7 @@ Contents
 * [fitCdSeNP](./fitCdSeNP) - Fit the PDF of CdSe nanoparticles using a
   non-periodic structure model.
 
-* [fitCdSeNP](./fitNiPDF) - Fit a Ni neutron PDF using a periodic Ni structure
+* [fitNiPDF](./fitNiPDF) - Fit a neutron PDF data from nickel using a periodic structure
   model.
 
 * [linearfit](./linearfit) - Perform a simple linear fit to a set of noisy
