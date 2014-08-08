@@ -27,6 +27,8 @@ Contents
   data. This script can be run in IPython "demo" mode or as an IPython
   notebook.
 
+* [pdfrectprofile](./pdfrectprofile) - Demonstrate definition of custom
+  profile for PDF calculation.
 
 More information on IPython
 ---------------------------
