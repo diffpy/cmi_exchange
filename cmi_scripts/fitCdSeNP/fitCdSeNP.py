@@ -32,14 +32,16 @@ cdsePDF.setCalculationRange(xmin=1, xmax=20, dx=0.01)
 cdseStructure = loadStructure(structureFile)
 cdsePDF.addStructure("CdSe", cdseStructure, periodic=False)
 
-# The FitRecipe does the work of calculating the PDF with the fit variable
-# that we give it.
+# The FitRecipe does the work of managing one or more contributions
+# that are optimized together.  In addition, FitRecipe configures
+# fit variables that are tied to the model parameters and thus
+# controls the calculated profiles.
 cdseFit = FitRecipe()
 
 # give the PDFContribution to the FitRecipe
 cdseFit.addContribution(cdsePDF)
 
-# As usual, we add variables for the overall scale of the PDF and a delta2
+# Here we create variables for the overall scale of the PDF and a delta2
 # parameter for correlated motion of neighboring atoms.
 cdseFit.addVar(cdsePDF.scale, 1)
 cdseFit.addVar(cdsePDF.CdSe.delta2, 5)
