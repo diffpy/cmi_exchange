@@ -20,6 +20,9 @@ Contents
 * [fitCdSeNP](./fitCdSeNP) - Fit the PDF of CdSe nanoparticles using a
   non-periodic structure model.
 
+* [fitNaClBVS](./fitNaClBVS) - Fit X-ray PDF data from NaCl with a restraint
+  for bond valence sums in the structure.
+
 * [fitNiPDF](./fitNiPDF) - Fit a neutron PDF data from nickel using a periodic structure
   model.
 
