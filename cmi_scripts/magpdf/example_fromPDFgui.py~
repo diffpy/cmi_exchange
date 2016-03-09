@@ -6,7 +6,6 @@ This example will show how to perform mPDF refinements after having done the ato
 PDF refinement in PDFgui. We use data from MnO at 15 K.
 '''
 
-# Import necessary functions
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq

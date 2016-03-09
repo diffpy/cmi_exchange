@@ -34,7 +34,7 @@ mstr.loadSpecies(mn2p)
 mstr.makeAll()
 
 # Set up the mPDF calculator
-mc = mPDFcalculator(magstruc=mstr, gaussPeakWidth=0.2)
+mc = mPDFcalculator(magstruc=mstr)
 
 ### DO THE STRUCTURAL FIT USING SRFIT
 
