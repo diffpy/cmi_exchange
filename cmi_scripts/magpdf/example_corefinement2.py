@@ -3,8 +3,8 @@
 
 '''
 This example will show how to simultaneously refine the atomic and magnetic PDF
-of MnO using SrFit. First, we refine each component separately, then we refine 
-them together. Doing it in steps like this can be useful to help the combined 
+of MnO using SrFit. First, we refine each component separately, then we refine
+them together. Doing it in steps like this can be useful to help the combined
 fit converge more quickly.
 '''
 
@@ -222,4 +222,3 @@ ax.set_xlim(xmax=mc.rmax)
 plt.legend()
 
 plt.show()
-
