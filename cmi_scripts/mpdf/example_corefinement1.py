@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize.minpack import leastsq
 
-from diffpy.magpdf import *
+from diffpy.mpdf import *
 from diffpy.Structure.Parsers import getParser
 from diffpy.srfit.pdf import PDFGenerator, PDFParser
 from diffpy.srfit.fitbase import FitRecipe, FitResults
@@ -44,7 +44,7 @@ nucpdf = PDFGenerator("nucpdf")
 nucpdf.setStructure(mno)
 nucpdf.setProfile(profile)
 
-# prepare magpdf function that simulates the magnetic PDF
+# prepare mpdf function that simulates the magnetic PDF
 
 # Create the Mn2+ magnetic species
 mn2p = magSpecies(struc=mno, label='Mn2+', magIdxs=[0,1,2],
@@ -61,7 +61,7 @@ mstr.makeAll()
 mc=mPDFcalculator(magstruc=mstr,rmin=rmin,rmax=rmax,
                   rstep=rstep, gaussPeakWidth=0.2)
 
-def magpdf(parascale, ordscale):
+def mpdf(parascale, ordscale):
     mc.paraScale = parascale
     mc.ordScale = ordscale
     mc.magstruc.makeAtoms()
@@ -74,8 +74,8 @@ totpdf.addProfileGenerator(nucpdf)
 totpdf.setProfile(profile)
 
 # Add mPDF to the FitContribution
-totpdf.registerFunction(magpdf)
-totpdf.setEquation("nucscale * nucpdf + magpdf(parascale, ordscale)")
+totpdf.registerFunction(mpdf)
+totpdf.setEquation("nucscale * nucpdf + mpdf(parascale, ordscale)")
 
 # Make magnetic PDF depend on any changes to the atomic structure.
 # Cover your eyes, but a structure change will now trigger the same
@@ -142,7 +142,7 @@ gobs = mnofit.totpdf.profile.y
 # measured PDF
 gcalc = mnofit.totpdf.evaluate()
 gnuc = mnofit.totpdf.evaluateEquation('nucscale * nucpdf')
-gmag = mnofit.totpdf.evaluateEquation('magpdf')
+gmag = mnofit.totpdf.evaluateEquation('mpdf')
 
 baseline = 1.1 * gobs.min()
 gdiff = gobs - gcalc

@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 
-from diffpy.magpdf import *
+from diffpy.mpdf import *
 from diffpy.Structure import loadStructure
 
 # Create the structure from our cif file, update the lattice params
