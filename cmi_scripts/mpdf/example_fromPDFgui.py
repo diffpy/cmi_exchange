@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 
-from diffpy.magpdf import *
+from diffpy.mpdf import *
 from diffpy.Structure import loadStructure
 
 # Create the structure from our cif file, update the lattice params
@@ -21,19 +21,19 @@ lat = mnostructure.lattice
 lat.a,lat.b,lat.c = 3.1505626,3.1505626,7.5936979 ## refined values from PDFgui
 
 # Create the Mn2+ magnetic species
-mn2p = magSpecies(struc=mnostructure, label='Mn2+', magIdxs=[0,1,2],
+mn2p = MagSpecies(struc=mnostructure, label='Mn2+', magIdxs=[0,1,2],
                  basisvecs=2.5*np.array([1,0,0]), kvecs=np.array([0,0,1.5]),
                  ffparamkey='Mn2')
 
 # Create and prep the magnetic structure
-mstr = magStructure()
+mstr = MagStructure()
 mstr.loadSpecies(mn2p)
 mstr.makeAtoms()
 mstr.makeSpins()
 mstr.makeFF()
 
 # Set up the mPDF calculator
-mc = mPDFcalculator(magstruc=mstr, gaussPeakWidth=0.2)
+mc = MPDFcalculator(magstruc=mstr, gaussPeakWidth=0.2)
 
 # Load the data
 PDFfitFile = 'MnOfit_PDFgui.fgr'

@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 
-from diffpy.magpdf import *
+from diffpy.mpdf import *
 from diffpy.Structure.Parsers import getParser
 from diffpy.srfit.pdf import PDFGenerator, PDFParser
 from diffpy.srfit.fitbase import FitRecipe, FitResults
@@ -126,18 +126,18 @@ plt.show()
 ### NOW DO THE INITIAL MAGNETIC REFINEMENT
 
 # Create the Mn2+ magnetic species
-mn2p = magSpecies(struc=mno, label='Mn2+', magIdxs=[0,1,2],
+mn2p = MagSpecies(struc=mno, label='Mn2+', magIdxs=[0,1,2],
                   basisvecs=2.5*np.array([1,0,0]), kvecs=np.array([0,0,1.5]),
                   ffparamkey='Mn2')
 
 # Create and prep the magnetic structure
-mstr = magStructure()
+mstr = MagStructure()
 mstr.loadSpecies(mn2p)
 mstr.makeAll()
 
 # Set up the mPDF calculator.
 
-mc=mPDFcalculator(magstruc=mstr,rmin=rmin,rmax=rmax,
+mc=MPDFcalculator(magstruc=mstr,rmin=rmin,rmax=rmax,
                   rstep=rstep, gaussPeakWidth=0.2)
 
 # Do the refinement
@@ -167,7 +167,7 @@ plt.show()
 
 
 ### NOW DO THE CO-REFINEMENT OF STRUCTURAL AND MAGNETIC PDF
-def magpdf(parascale, ordscale):
+def mpdf(parascale, ordscale):
     mc.paraScale = parascale
     mc.ordScale = ordscale
     mc.magstruc.makeAtoms()
@@ -176,8 +176,8 @@ def magpdf(parascale, ordscale):
     return rv
 
 # Add the mPDF to the totpdf FitContribution
-totpdf.registerFunction(magpdf)
-totpdf.setEquation("nucscale * nucpdf + magpdf(parascale, ordscale)")
+totpdf.registerFunction(mpdf)
+totpdf.setEquation("nucscale * nucpdf + mpdf(parascale, ordscale)")
 
 # Make magnetic PDF depend on any changes to the atomic structure.
 # Cover your eyes, but a structure change will now trigger the same
@@ -203,7 +203,7 @@ print mnoresults
 # measured PDF
 gcalc = mnofit.totpdf.evaluate()
 gnuc = mnofit.totpdf.evaluateEquation('nucscale * nucpdf')
-gmag = mnofit.totpdf.evaluateEquation('magpdf')
+gmag = mnofit.totpdf.evaluateEquation('mpdf')
 
 baseline = 1.1 * gobs.min()
 gdiff = gobs - gcalc

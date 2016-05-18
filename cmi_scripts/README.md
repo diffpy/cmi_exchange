@@ -33,7 +33,7 @@ Contents
 * [pdfrectprofile](./pdfrectprofile) - Demonstrate definition of custom
   profile for PDF calculation.
 
-* [magpdf](./magpdf) - Provide several examples of calculating and refining
+* [mpdf](./mpdf) - Provide several examples of calculating and refining
   magnetic PDFs. Start with introTutorial.ipynb.
 
 More information on IPython
