@@ -49,10 +49,10 @@ cdseFit.addVar(cdsePDF.CdSe.delta2, 5)
 # We fix Qdamp based on prior information about our beamline.
 cdseFit.addVar(cdsePDF.qdamp, 0.06, fixed=True)
 
-# Since we are calculating PDF from a non-periodic structure, we also need to 
+# Since we are calculating PDF from a non-periodic structure, we also need to
 # specify the Qmin to get he correct PDF. The value of Qmin could be the actual
 # Qmin in the experiment or the Qmin used in PDF transformation, or some value
-# related to the size and the shape of the structure model. Usually a value 
+# related to the size and the shape of the structure model. Usually a value
 # in (0.5 ~ 1.0) will give reasonable results.
 cdsePDF.CdSe.setQmin(1.0)
 
@@ -64,8 +64,8 @@ cdsePDF.CdSe.setQmax(20.0)
 CdBiso = cdseFit.newVar("Cd_Biso", value=1.0)
 SeBiso = cdseFit.newVar("Se_Biso", value=1.0)
 
-# For all atoms in the structure model, we constrain their Biso according to 
-# their species  
+# For all atoms in the structure model, we constrain their Biso according to
+# their species
 atoms = cdsePDF.CdSe.phase.getScatterers()
 for atom in atoms:
     if atom.element == 'Cd':
@@ -73,13 +73,13 @@ for atom in atoms:
     elif atom.element == 'Se':
         cdseFit.constrain(atom.Biso, SeBiso)
 
-# Now we create a zoomscale factor which stretches the structure model, this is 
+# Now we create a zoomscale factor which stretches the structure model, this is
 # useful when you want to fit the bond length. Note that the relative position
 # of atoms are not changed during the refinements
 zoomscale = cdseFit.newVar('zoomscale', value=1.0)
 
 # Here is a simple we to assign the zoomscale to the structure. Note that this
-# only works for NON-PERIODIC structure 
+# only works for NON-PERIODIC structure
 lattice = cdsePDF.CdSe.phase.getLattice()
 cdseFit.constrain(lattice.a, zoomscale)
 cdseFit.constrain(lattice.b, zoomscale)
