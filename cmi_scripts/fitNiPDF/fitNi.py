@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 
 # We'll need numpy and pylab for plotting our results
 import numpy as np
@@ -44,9 +45,9 @@ niFit.addContribution(niPDF)
 # parameters according to the Fm-3m space group.
 from diffpy.srfit.structure import constrainAsSpaceGroup
 spaceGroupParams = constrainAsSpaceGroup(niPDF.nickel.phase, spaceGroup)
-print "Space group parameters are:",
-print ', '.join([p.name for p in spaceGroupParams])
-print
+print("Space group parameters are:",
+      ', '.join(p.name for p in spaceGroupParams))
+print()
 
 # We can now cycle through the parameters and activate them in the recipe as
 # variables
@@ -68,17 +69,17 @@ niFit.addVar(niPDF.qdamp, 0.03, fixed=True)
 niFit.clearFitHooks()
 
 # We can now execute the fit using scipy's least square optimizer.
-print "Refine PDF using scipy's least-squares optimizer:"
-print "  variables:", niFit.names
-print "  initial values:", niFit.values
+print("Refine PDF using scipy's least-squares optimizer:")
+print("  variables:", niFit.names)
+print("  initial values:", niFit.values)
 leastsq(niFit.residual, niFit.values)
-print "  final values:", niFit.values
-print
+print("  final values:", niFit.values)
+print()
 
 # Obtain and display the fit results.
 niResults = FitResults(niFit)
-print "FIT RESULTS\n"
-print niResults
+print("FIT RESULTS\n")
+print(niResults)
 
 # Plot the observed and refined PDF.
 
