@@ -7,6 +7,7 @@ PDF refinement in SrFit. We use data from MnO at 15 K.
 '''
 
 # Import necessary functions
+from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
@@ -60,9 +61,9 @@ MnOFit.addContribution(MnOPDF)
 # parameters according to the H-3m space group.
 from diffpy.srfit.structure import constrainAsSpaceGroup
 spaceGroupParams = constrainAsSpaceGroup(MnOPDF.MnO.phase, spaceGroup)
-print "Space group parameters are:",
-print ', '.join([p.name for p in spaceGroupParams])
-print
+print("Space group parameters are:", end=' ')
+print(', '.join([p.name for p in spaceGroupParams]))
+print()
 
 # We can now cycle through the parameters and activate them in the recipe as
 # variables
@@ -84,17 +85,17 @@ MnOFit.addVar(MnOPDF.qdamp, 0.03, fixed=True)
 MnOFit.clearFitHooks()
 
 # We can now execute the fit using scipy's least square optimizer.
-print "Refine PDF using scipy's least-squares optimizer:"
-print "  variables:", MnOFit.names
-print "  initial values:", MnOFit.values
+print("Refine PDF using scipy's least-squares optimizer:")
+print("  variables:", MnOFit.names)
+print("  initial values:", MnOFit.values)
 leastsq(MnOFit.residual, MnOFit.values)
-print "  final values:", MnOFit.values
-print
+print("  final values:", MnOFit.values)
+print()
 
 # Obtain and display the fit results.
 MnOResults = FitResults(MnOFit)
-print "FIT RESULTS\n"
-print MnOResults
+print("FIT RESULTS\n")
+print(MnOResults)
 
 # Get the experimental data from the recipe
 r = MnOFit.MnO.profile.x
@@ -116,7 +117,7 @@ def residual(p, yexp, mcalc):
 
 p0 = [5.0, 3.0] # initial parameter values (parScale, ordScale)
 pOpt = leastsq(residual, p0, args=(gdiff,mc))
-print pOpt
+print(pOpt)
 
 fit=mc.calc(both=True)[2]
 

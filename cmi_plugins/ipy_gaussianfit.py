@@ -46,6 +46,7 @@ their starting values.
 This extension is based on the SrFit example gaussianrecipe.py
 """
 
+from __future__ import print_function
 from diffpy.srfit.fitbase import FitContribution, FitRecipe, Profile, FitResults
 
 
@@ -89,7 +90,7 @@ class GaussianFit(object):
         if A is not None:  self.A = A
         if sig is not None:  self.sig = sig
         if x0 is not None:  self.x0 = x0
-        print 'Initial parameter values:'
+        print('Initial parameter values:')
         self.printValues()
         return
 
@@ -178,9 +179,9 @@ class GaussianFit(object):
     def printValues(self):
         '''Print out values of Gaussian parameters
         '''
-        print 'A =', self.A
-        print 'sig =', self.sig
-        print 'x0 =', self.x0
+        print('A =', self.A)
+        print('sig =', self.sig)
+        print('x0 =', self.x0)
         return
 
 
@@ -203,8 +204,8 @@ class GaussianFit(object):
         from scipy.optimize.minpack import leastsq
         leastsq(self.recipe.residual, self.recipe.values)
         self.results = FitResults(self.recipe)
-        print "Fit results:\n"
-        print self.results
+        print("Fit results:\n")
+        print(self.results)
         return
 
 # end of class GaussianFit

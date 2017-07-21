@@ -7,6 +7,7 @@ of MnO using SrFit.
 '''
 
 # Import necessary functions
+from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize.minpack import leastsq
@@ -94,9 +95,9 @@ mnofit.addContribution(totpdf)
 # parameters according to the CIF-loaded space group.
 from diffpy.srfit.structure import constrainAsSpaceGroup
 sgpars = constrainAsSpaceGroup(nucpdf.phase, pcif.spacegroup.short_name)
-print "Space group parameters are:",
-print ', '.join([p.name for p in sgpars])
-print
+print("Space group parameters are:", end=' ')
+print(', '.join([p.name for p in sgpars]))
+print()
 
 # We can now cycle through the parameters and activate them in the recipe as
 # variables
@@ -122,16 +123,16 @@ mnofit.addVar(totpdf.ordscale, 1.5)
 mnofit.clearFitHooks()
 
 # Initial structural fit
-print "Refine PDF using scipy's least-squares optimizer:"
-print "  variables:", mnofit.names
-print "  initial values:", mnofit.values
+print("Refine PDF using scipy's least-squares optimizer:")
+print("  variables:", mnofit.names)
+print("  initial values:", mnofit.values)
 leastsq(mnofit.residual, mnofit.values)
-print "  final values:", mnofit.values
-print
+print("  final values:", mnofit.values)
+print()
 # Obtain and display the fit results.
 mnoresults = FitResults(mnofit)
-print "FIT RESULTS\n"
-print mnoresults
+print("FIT RESULTS\n")
+print(mnoresults)
 
 
 # Get the experimental data from the recipe

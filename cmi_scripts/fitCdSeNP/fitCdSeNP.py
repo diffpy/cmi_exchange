@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 # We'll need numpy and matplotlib for plotting our results
 import numpy as np
 import matplotlib.pyplot as plt
@@ -89,17 +91,17 @@ cdseFit.constrain(lattice.c, zoomscale)
 cdseFit.clearFitHooks()
 
 # We can now execute the fit using scipy's least square optimizer.
-print "Refine PDF using scipy's least-squares optimizer:"
-print "  variables:", cdseFit.names
-print "  initial values:", cdseFit.values
+print("Refine PDF using scipy's least-squares optimizer:")
+print("  variables:", cdseFit.names)
+print("  initial values:", cdseFit.values)
 leastsq(cdseFit.residual, cdseFit.values)
-print "  final values:", cdseFit.values
-print
+print("  final values:", cdseFit.values)
+print()
 
 # Obtain and display the fit results.
 cdseResults = FitResults(cdseFit)
-print "FIT RESULTS\n"
-print cdseResults
+print("FIT RESULTS\n")
+print(cdseResults)
 
 # Plot the observed and refined PDF.
 

@@ -7,6 +7,7 @@ PDF refinement in PDFgui. We use data from MnO at 15 K.
 '''
 
 # Import necessary functions
+from __future__ import print_function
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
@@ -48,7 +49,7 @@ def residual(p, yexp, mcalc):
 
 p0 = [5.0,3.0] # initial parameter values (paraScale, ordScale)
 pOpt = leastsq(residual, p0, args=(Drexp,mc))
-print pOpt
+print(pOpt)
 
 fit=mc.calc(both=True)[2]
 
