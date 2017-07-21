@@ -47,7 +47,7 @@ This extension is based on the SrFit example gaussianrecipe.py
 """
 
 from diffpy.srfit.fitbase import FitContribution, FitRecipe, Profile, FitResults
-import numpy as np
+
 
 class GaussianFit(object):
     '''Least-squares fit of Gauss function to the specified data.
@@ -187,13 +187,13 @@ class GaussianFit(object):
     def plot(self):
         '''Plot the input data and the best fit.
         '''
-        import pylab
-        pylab.plot(self.x, self.y, 'b.', label="observed Gaussian")
-        pylab.plot(self.x, self.yg, 'g-', label="calculated Gaussian")
-        pylab.legend()
-        pylab.xlabel("x")
-        pylab.ylabel("y")
-        pylab.show()
+        import matplotlib.pyplot as plt
+        plt.plot(self.x, self.y, 'b.', label="observed Gaussian")
+        plt.plot(self.x, self.yg, 'g-', label="calculated Gaussian")
+        plt.legend()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.show()
         return
 
 

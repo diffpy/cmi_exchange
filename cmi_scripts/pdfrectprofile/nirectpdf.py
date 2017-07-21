@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from matplotlib.pyplot import *
+import matplotlib.pyplot as plt
 from diffpy.Structure import loadStructure
 from diffpy.srreal.pdfcalculator import PDFCalculator
 from rectangleprofile import RectangleProfile
@@ -25,6 +25,6 @@ print "custom peakprofile:\n    " + repr(pc1.peakprofile)
 r2, g2 = pc2(ni)
 
 # compare both simulated curves
-plot(r1, g1, r2, g2)
-draw()
-show()
+plt.plot(r1, g1, r2, g2)
+plt.draw()
+plt.show()

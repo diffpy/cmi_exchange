@@ -3,9 +3,9 @@
 
 from __future__ import print_function
 
-# We'll need numpy and pylab for plotting our results
+# We'll need numpy and matplotlib for plotting our results
 import numpy as np
-import pylab
+import matplotlib.pyplot as plt
 
 # A least squares fitting algorithm from scipy
 from scipy.optimize.minpack import leastsq
@@ -94,14 +94,14 @@ baseline = 1.1 * gobs.min()
 gdiff = gobs - gcalc
 
 # Plot!
-pylab.figure()
-pylab.plot(r, gobs, 'bo', label="G(r) data",
-        markerfacecolor='none', markeredgecolor='b')
-pylab.plot(r, gcalc, 'r-', label="G(r) fit")
-pylab.plot(r, gdiff + baseline, 'g-', label="G(r) diff")
-pylab.plot(r, np.zeros_like(r) + baseline, 'k:')
-pylab.xlabel(r"r ($\AA$)")
-pylab.ylabel(r"G ($\AA^{-2}$)")
-pylab.legend()
+plt.figure()
+plt.plot(r, gobs, 'bo', label="G(r) data",
+         markerfacecolor='none', markeredgecolor='b')
+plt.plot(r, gcalc, 'r-', label="G(r) fit")
+plt.plot(r, gdiff + baseline, 'g-', label="G(r) diff")
+plt.plot(r, np.zeros_like(r) + baseline, 'k:')
+plt.xlabel(r"r ($\AA$)")
+plt.ylabel(r"G ($\AA^{-2}$)")
+plt.legend()
 
-pylab.show()
+plt.show()

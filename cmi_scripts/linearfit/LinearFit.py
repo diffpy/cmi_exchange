@@ -35,11 +35,11 @@ yobs = 0.5 * xobs + 3 + dyobs * np.random.randn(xobs.size)
 
 # Plot the generated "observed" data (xobs, yobs).
 
-from matplotlib.pyplot import *
-ion(); clf(); hold(False)
-plot(xobs, yobs, 'x')
-title('y = 0.5*x + 3 generated with a normal noise at sigma=0.3')
-show()
+import matplotlib.pyplot as plt
+plt.ion(); plt.clf(); plt.hold(False)
+plt.plot(xobs, yobs, 'x')
+plt.title('y = 0.5*x + 3 generated with a normal noise at sigma=0.3')
+plt.show()
 
 # <demo> --- stop ---
 
@@ -85,8 +85,8 @@ print(linefit.B, linefit.B.value)
 
 print("linefit.evaluate() =", linefit.evaluate())
 print("linefit.residual() =", linefit.residual())
-plot(xobs, yobs, 'x', linedata.x, linefit.evaluate(), '-')
-title('Line simulated at A=3, B=5')
+plt.plot(xobs, yobs, 'x', linedata.x, linefit.evaluate(), '-')
+plt.title('Line simulated at A=3, B=5')
 
 # <demo> --- stop ---
 
@@ -149,8 +149,8 @@ linefit.show()
 # The calculated function is available in the ycalc attribute of the profile.
 # It can be also accessed from the "linefit" contribution attribute of the
 # recipe as "rec.linefit.profile.ycalc".
-plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
-title('Line fit using the leastsq least-squares optimizer')
+plt.plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+plt.title('Line fit using the leastsq least-squares optimizer')
 
 # <demo> --- stop ---
 
@@ -160,8 +160,8 @@ title('Line fit using the leastsq least-squares optimizer')
 from scipy.optimize import fmin
 fmin(rec.scalarResidual, [1, 1])
 print(rec.names, "-->", rec.values)
-plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
-title('Line fit using the fmin scalar optimizer')
+plt.plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+plt.title('Line fit using the fmin scalar optimizer')
 
 # <demo> --- stop ---
 
@@ -186,8 +186,8 @@ print("fixed:", rec.fixednames, "-->", rec.fixedvalues)
 # The fit can be rerun with a constant variable B.
 leastsq(rec.residual, rec.values)
 print(FitResults(rec))
-plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
-title('Line fit for variable B fixed to B=0')
+plt.plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+plt.title('Line fit for variable B fixed to B=0')
 
 # <demo> --- stop ---
 
@@ -201,8 +201,8 @@ rec.constrain(rec.A, "2 * B")
 # Perform linear fit where slope is twice the offset.
 leastsq(rec.residual, rec.values)
 print(FitResults(rec))
-plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
-title('Line fit for variable A constrained to A = 2*B')
+plt.plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+plt.title('Line fit for variable A constrained to A = 2*B')
 
 # <demo> --- stop ---
 
@@ -218,5 +218,5 @@ arst = rec.restrain(rec.A, ub=0.2, sig=0.001)
 # Perform fit with the line slope restrained to a maximum value of 0.2:
 leastsq(rec.residual, rec.values)
 print(FitResults(rec))
-plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
-title('Line fit with A restrained to an upper bound of 0.2')
+plt.plot(linedata.x, linedata.y, 'x', linedata.x, linedata.ycalc, '-')
+plt.title('Line fit with A restrained to an upper bound of 0.2')
