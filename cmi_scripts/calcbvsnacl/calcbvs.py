@@ -48,5 +48,5 @@ print()
 
 print("Handling of unknown or invalid ion pairs:")
 print("  table.lookup('A+', 'X-'):", table.lookup('A+', 'X-'))
-print("  table.lookup('A+', 'X-') == table.none():", (
-        table.lookup('A+', 'X-') == table.none()))
+print("  table.lookup('A+', 'X-') == table.none():",
+      table.lookup('A+', 'X-') == table.none())
