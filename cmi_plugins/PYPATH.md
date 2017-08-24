@@ -28,8 +28,8 @@ potential site directories that should process the .pth files:
 
 ```sh
 python -c "import site; \
-    print (site.getusersitepackages() if site.ENABLE_USER_SITE \
-        else '\n'.join(site.getsitepackages()))"
+    print(site.getusersitepackages() if site.ENABLE_USER_SITE
+          else '\n'.join(site.getsitepackages()))"
 ```
 
 Note that some of those directories may not exist, especially the user
